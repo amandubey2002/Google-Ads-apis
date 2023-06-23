@@ -20,7 +20,6 @@ def get_campiagn_data():
     access_token = request.json.get("access_token")
     stream = get_camp(access_token)
     campaign_data = [[{"campaign_id":batch.campaign.id,"campaign_name":batch.campaign.name,"campaign_status":batch.campaign.status}] for batch in stream]
-    print("batchHHHHHHHHHHHHHHH",stream)
     return jsonify({"campaign":campaign_data})
 
 @app.route("/get_ad_group")
@@ -50,16 +49,15 @@ def get_ad_group():
     search_request.page_size = _DEFAULT_PAGE_SIZE
     
     result = service.search(request=search_request)
-    for row in result:
-        print(
-            f"Ad group with ID {row.ad_group.id} and name "
-            f'"{row.ad_group.name}" was found in campaign with '
-            f"ID {row.campaign.id}."
-            f"campaign {row.campaign}"
-        )
+    # for row in result:
+    #     print(
+    #         f"Ad group with ID {row.ad_group.id} and name "
+    #         f'"{row.ad_group.name}" was found in campaign with '
+    #         f"ID {row.campaign.id}."
+    #         f"campaign {row.campaign}"
+    #     )
 
     campaign_data = [[{"ad_group_name":row.ad_group.id,"campaign_id":row.campaign.id,"campaign_status":row.campaign.status}] for row in result]
-    print(len(campaign_data))
     return jsonify({"campaign":campaign_data})   
 
 
@@ -137,7 +135,6 @@ def add_campaign():
         campaign_response = campaign_service.mutate_campaigns(
                 customer_id=customer_id, operations=[campaign_operation]
             )
-        print(f"Created campaign {campaign_response.results[0].resource_name}.")
     
     except Exception as e:
         print(e)
@@ -185,8 +182,7 @@ def update_campaign():
     campaign_response = campaign_service.mutate_campaigns(
         customer_id = customer_id, operations = [campaign_opration]
     )
-    print("----------------------",campaign_response)
-
+    
     return f"Updated Sucsessfullyy {campaign_response}" ,200 
     
 
